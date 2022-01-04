@@ -1,0 +1,46 @@
+# mutation {
+#   createUser(name: "Dhruv", userName: "dhruv0008", email: "dhruv@gmail.com", password: "987654321") {
+#     name
+#     email
+#   }
+# }
+
+# query {
+#   getUserList {
+#     id,
+#     name
+#   }
+# }
+
+# query {
+#   userDetails (id: "61cc2681a5f43c34fd80b733" ) {
+#     id,
+#     name,
+#     email
+#   }
+# }
+
+# mutation {
+#   updateUser (id: "61cc2681a5f43c34fd80b733", name: "charan", userName: "charan0008", email: "charan@gmail.com", password: "987654321") {
+#     success,
+#     data
+#   }
+# }
+
+# mutation  {
+#   updateUser (id: "61cc2681a5f43c34fd80b733", name: "charan", userName: "charan0008", email: "charan@gmail.com", password: "987654321") {
+#     success,
+#     data
+#   }
+# }
+
+# mutation {
+#   updateUser (id: "61cc2681a5f43c34fd80b733", name: "charan") {
+#     success,
+#     message,
+#     data {
+#       id,
+#       name
+#     }
+#   }
+# }
