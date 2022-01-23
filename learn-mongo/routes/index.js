@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { signUp, getAllUsers } = require("../handlers/auth");
+const { signUp, getAllUsers, getUsersById } = require("../handlers/auth");
 
 router.post("/auth/signup", signUp);
 router.get("/getAllUser", getAllUsers);
+router.get("/:id", getUsersById);
 
 router.get('/', (req, res) => {
   res.status(200).send('API server');

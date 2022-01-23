@@ -5,10 +5,36 @@ const express = require('express'),
   mongodb = require('./models');
   authRoute = require("./routes")
   schema = require('./schema'),
-  { graphqlHTTP } = require('express-graphql');
+  { graphqlHTTP } = require('express-graphql'),
+  http = require('http').createServer(app),
+  io = require('socket.io')(http, {
+    cros: {
+      origin: "*"
+    }
+  });
 
 app.use(cors());
 app.use(express.json());
+
+const user = [];
+
+io.on('connection', socket => {
+  socket.on('user-connected', userId => {
+    user[userId] = socket.id;
+  });
+
+  socket.on('send-message', async (data) => {
+    const receiverData = await mongodb.User.findOne({_id: data.reciverId });
+    if (receiverData) {
+      const senderData = await mongodb.User.findOne({_id: data.senderId });
+      if (senderData) {
+        var message = "New message received " + senderData.name + " Message: " + data.message;
+
+        io.to(user[receiverData.id]).emit("messageReceived", message);
+      }
+    }
+  });
+});
 
 // console.log(mongodb);
 const rootValue = {
@@ -31,9 +57,13 @@ app.use(
   })),
 );
 
-// app.use(authRoute)
+app.get('/', (req, res) => {
+  res.send('App listing on 5000')
+})
+
+app.use(authRoute)
 
 // require('./routes')(app);
 
 // module.exports = app.listen(process.env.PORT, console.log(`App listing on ${process.env.PORT}`));
-module.exports = app.listen(5000, console.log(`App listing on 5000`));
+module.exports = http.listen(5000, console.log(`App listing on 5000`));
